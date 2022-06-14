@@ -6,7 +6,8 @@
 #include "nan.h"
 
 // Main Imports
-#include "algorithms/sha256d.h"
+#include "algorithms/sha256d/sha256d.h"
+#include "algorithms/x11/x11.h"
 
 using namespace node;
 using namespace v8;
@@ -33,8 +34,26 @@ NAN_METHOD(sha256d) {
   info.GetReturnValue().Set(Nan::CopyBuffer(output, 32).ToLocalChecked());
 }
 
+// X11 Algorithm
+NAN_METHOD(x11) {
+
+  // Check Arguments for Errors
+  if (info.Length() < 1)
+    return THROW_ERROR_EXCEPTION("You must provide one argument.");
+
+  // Process/Define Passed Parameters
+  char * input = Buffer::Data(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  uint32_t input_len = Buffer::Length(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  char output[32];
+
+  // Hash Input Data and Return Output
+  x11_hash(input, output, input_len);
+  info.GetReturnValue().Set(Nan::CopyBuffer(output, 32).ToLocalChecked());
+}
+
 NAN_MODULE_INIT(init) {
   Nan::Set(target, Nan::New("sha256d").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(sha256d)).ToLocalChecked());
+  Nan::Set(target, Nan::New("x11").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(x11)).ToLocalChecked());
 }
 
 NODE_MODULE(hashing, init)
