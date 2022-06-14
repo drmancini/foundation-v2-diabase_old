@@ -102,7 +102,7 @@ const Transactions = function(config) {
 
     // Handle Masternodes
     if (rpcData.masternode.length > 0) {
-      rpcData.masternode.forEach(payee => {
+      rpcData.masternode.forEach((payee) => {
         const payeeReward = payee.amount;
         let payeeScript;
         if (payee.script) payeeScript = Buffer.from(payee.script, 'hex');
@@ -118,7 +118,7 @@ const Transactions = function(config) {
 
     // Handle Superblocks
     if (rpcData.superblock.length > 0) {
-      rpcData.superblock.forEach(payee => {
+      rpcData.superblock.forEach((payee) => {
         const payeeReward = payee.amount;
         let payeeScript;
         if (payee.script) payeeScript = Buffer.from(payee.script, 'hex');
