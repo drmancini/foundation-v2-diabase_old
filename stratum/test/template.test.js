@@ -56,7 +56,6 @@ describe('Test template functionality', () => {
     const extraNonce2 = Buffer.from('00', 'hex');
     const coinbase = template.handleCoinbase(extraNonce1, extraNonce2);
     expect(coinbase.slice(0, 44)).toStrictEqual(Buffer.from('03000500010000000000000000000000000000000000000000000000000000000000000000ffffffff12037c', 'hex'));
-    expect(coinbase.slice(49, 51)).toStrictEqual(Buffer.from('a762', 'hex'));
     expect(coinbase.slice(51)).toStrictEqual(Buffer.from('08010000000000022c56f32a000000001976a9140d38a9d28604df5924cff3560b95e0a377c671b388ac41016d40000000001976a9141ec5c66e9789c655ae068d35088b4073345fe0b088ac000000004602007c550b000ec66728cf59b7f525f47b239b7f432f527b2986ea56618e907cc1dc3f45d0d3139c2b50ce2dd3369cc3c0c824b87b0b1acf6fae039b1ce746c421b60f2ff274', 'hex'));
   });
 
