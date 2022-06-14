@@ -62,7 +62,7 @@ describe('Test template functionality', () => {
 
   test('Test coinbase serialization [2]', () => {
     const coinbaseBuffer = Buffer.from('01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff020101ffffffff0100f2052a010000001976a914614ca2f0f4baccdd63f45a0e0e0ff7ffb88041fb88ac00000000', 'hex');
-    const hashDigest = Algorithms.sha256d.hash();
+    const hashDigest = Algorithms.x11.hash();
     const coinbaseHash = hashDigest(coinbaseBuffer);
     expect(coinbaseHash).toStrictEqual(Buffer.from('afd031100bff85a9ac01f1718be0b3d6c20228592f0242ea1e4d91a519b53031', 'hex'));
   });
@@ -78,7 +78,7 @@ describe('Test template functionality', () => {
 
   test('Test header serialization [2]', () => {
     const headerBuffer = Buffer.from('00000020e22777bc309503ee6be3c65f370ba629b6497dbe8b804cbd8365ef83fbae1997afd031100bff85a9ac01f1718be0b3d6c20228592f0242ea1e4d91a519b530314fc53660f0ff0f1e00001afe', 'hex');
-    const hashDigest = Algorithms.sha256d.hash();
+    const hashDigest = Algorithms.x11.hash();
     const headerHash = hashDigest(headerBuffer, 1614202191);
     expect(headerHash).toStrictEqual(Buffer.from('6927c80704a1616664c5c91157d895587ac0381976010411cbec9aade2f75a1d', 'hex'));
   });
