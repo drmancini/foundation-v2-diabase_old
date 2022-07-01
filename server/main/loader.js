@@ -70,19 +70,13 @@ const Loader = function(logger, configMain) {
     const normalizedPath = path.join(__dirname, '../../configs/');
     if (fs.existsSync(normalizedPath + 'dash.js')) {
       config = require(normalizedPath + 'dash.js');
-
-      // Validate Individual Configuration Files
       if (!config.enabled) return;
       if (!_this.checkPoolDaemons(config)) return;
       if (!_this.checkPoolPorts(config)) return;
       if (!_this.checkPoolRecipients(config)) return;
-
-    // No Configuration Created
     } else {
       throw new Error('Unable to find dash.js file. Read the installation/setup instructions');
     }
-
-    // Return Validated Configuration
     return config;
   };
 };
