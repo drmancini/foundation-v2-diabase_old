@@ -52,6 +52,7 @@ config.primary.address = '[address]';
 config.primary.coin = {};
 config.primary.coin.name = 'Dash';
 config.primary.coin.symbol = 'DASH';
+config.primary.coin.algorithm = 'x11';
 
 // Daemon Configuration
 config.primary.daemons = [];
