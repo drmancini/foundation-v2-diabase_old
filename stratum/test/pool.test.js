@@ -2569,7 +2569,7 @@ describe('Test pool functionality', () => {
     worker2.worker = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN.worker4';
     const expected = {
       'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 5000, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 5000, 'generate': 0 }};
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 5000, 'generate': 0 }};
     pool.handlePrimaryWorkers([blocks1], [[worker1, worker2]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
@@ -2617,7 +2617,7 @@ describe('Test pool functionality', () => {
     worker2.times = 49.1;
     const expected = {
       'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 8474.10994411, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 1525.89005589, 'generate': 0 }};
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 1525.89005589, 'generate': 0 }};
     pool.handlePrimaryWorkers([blocks1], [[worker1, worker2]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
@@ -2956,7 +2956,7 @@ describe('Test pool functionality', () => {
     worker2.times = 49.1;
     const expected = {
       'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 9570.00569668, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 429.99430332, 'generate': 0 }};
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 429.99430332, 'generate': 0 }};
     pool.handlePrimaryWorkers([blocks1], [[worker1, worker1, worker2]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
@@ -3011,7 +3011,7 @@ describe('Test pool functionality', () => {
       timestamp: '1662753912672',
       miner: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM',
       worker: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM.worker1',
-      category: 'immature',
+      category: 'generate',
       confirmations: 3,
       difficulty: 15.999771117945784,
       hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
@@ -3022,8 +3022,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary',
-      previous: 'pending',
+      type: 'primary',
+      previous: 'immature',
     };
     const worker1 = {
       id: '2',
@@ -3036,12 +3036,12 @@ describe('Test pool functionality', () => {
       solo: false,
       stale: 0,
       times: 276.95300000000003,
-      type: 'auxiliary',
+      type: 'primary',
       valid: 22,
       work: 29.489361720000005
     };
-    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 10000, 'generate': 0 }};
-    pool.handleAuxiliaryWorkers([blocks1], [[worker1]], false, (results) => {
+    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': -10000, 'generate': 10000 }};
+    pool.handlePrimaryWorkers([blocks1], [[worker1]], true, (results) => {
       expect(results).toStrictEqual(expected);
     });
   });
@@ -3082,8 +3082,8 @@ describe('Test pool functionality', () => {
       valid: 22,
       work: 29.489361720000005
     };
-    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'generate': 0, 'immature': 20000 }};
-    pool.handleAuxiliaryWorkers([blocks1, blocks1], [[worker1], [worker1]], false, (results) => {
+    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 10000, 'generate': 0 }};
+    pool.handleAuxiliaryWorkers([blocks1], [[worker1]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
   });
@@ -3124,13 +3124,8 @@ describe('Test pool functionality', () => {
       valid: 22,
       work: 29.489361720000005
     };
-    const worker2 = JSON.parse(JSON.stringify(worker1));
-    worker2.miner = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN';
-    worker2.worker = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN.worker4';
-    const expected = {
-      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 5000, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 5000, 'generate': 0 }};
-    pool.handleAuxiliaryWorkers([blocks1], [[worker1, worker2]], false, (results) => {
+    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'generate': 0, 'immature': 20000 }};
+    pool.handleAuxiliaryWorkers([blocks1, blocks1], [[worker1], [worker1]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
   });
@@ -3174,16 +3169,63 @@ describe('Test pool functionality', () => {
     const worker2 = JSON.parse(JSON.stringify(worker1));
     worker2.miner = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN';
     worker2.worker = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN.worker4';
-    worker2.times = 49.1;
     const expected = {
-      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 8474.10994411, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 1525.89005589, 'generate': 0 }};
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 5000, 'generate': 0 },
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 5000, 'generate': 0 }};
     pool.handleAuxiliaryWorkers([blocks1], [[worker1, worker2]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
   });
 
   test('Test pool workers handling [18]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM',
+      worker: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM.worker1',
+      category: 'immature',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'auxiliary',
+      previous: 'pending',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM',
+      worker: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'auxiliary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const worker2 = JSON.parse(JSON.stringify(worker1));
+    worker2.miner = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN';
+    worker2.worker = 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN.worker4';
+    worker2.times = 49.1;
+    const expected = {
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 8474.10994411, 'generate': 0 },
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 1525.89005589, 'generate': 0 }};
+    pool.handleAuxiliaryWorkers([blocks1], [[worker1, worker2]], false, (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [19]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3225,7 +3267,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [19]', () => {
+  test('Test pool workers handling [20]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3267,7 +3309,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [20]', () => {
+  test('Test pool workers handling [21]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3308,7 +3350,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [21]', () => {
+  test('Test pool workers handling [22]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3350,7 +3392,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [22]', () => {
+  test('Test pool workers handling [23]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3392,7 +3434,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [23]', () => {
+  test('Test pool workers handling [24]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3433,7 +3475,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [24]', () => {
+  test('Test pool workers handling [25]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3474,7 +3516,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [25]', () => {
+  test('Test pool workers handling [26]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3516,13 +3558,13 @@ describe('Test pool functionality', () => {
     worker2.times = 49.1;
     const expected = {
       'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 9570.00569668, 'generate': 0 },
-      'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq7': { 'immature': 429.99430332, 'generate': 0 }};
+      'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaN': { 'immature': 429.99430332, 'generate': 0 }};
     pool.handleAuxiliaryWorkers([blocks1], [[worker1, worker1, worker2]], false, (results) => {
       expect(results).toStrictEqual(expected);
     });
   });
 
-  test('Test pool workers handling [26]', () => {
+  test('Test pool workers handling [27]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3559,6 +3601,48 @@ describe('Test pool functionality', () => {
       work: 29.489361720000005
     };
     const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': 0, 'generate': 10000 }};
+    pool.handleAuxiliaryWorkers([blocks1], [[worker1]], true, (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [28]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM',
+      worker: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM.worker1',
+      category: 'generate',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'auxiliary',
+      previous: 'immature',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM',
+      worker: 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'auxiliary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const expected = { 'XbtkVnc9XRLhxfmafNkafderCWSsXYZJaM': { 'immature': -10000, 'generate': 10000 }};
     pool.handleAuxiliaryWorkers([blocks1], [[worker1]], true, (results) => {
       expect(results).toStrictEqual(expected);
     });
