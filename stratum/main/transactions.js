@@ -16,11 +16,11 @@ const Transactions = function(config, rpcData) {
       public: Buffer.from('0488B21E', 'hex').readUInt32LE(0),
       private: Buffer.from('0488ADE4', 'hex').readUInt32LE(0),
     },
-    peerMagic: 'bf0c6bbd',
-    pubKeyHash: Buffer.from('4C', 'hex').readUInt8(0),
-    scriptHash: Buffer.from('10', 'hex').readUInt8(0),
-    wif: Buffer.from('CC', 'hex').readUInt8(0),
-    coin: 'dash',
+    peerMagic: 'ee88063f',
+    pubKeyHash: Buffer.from('19', 'hex').readUInt8(0),
+    scriptHash: Buffer.from('1A', 'hex').readUInt8(0),
+    wif: Buffer.from('99', 'hex').readUInt8(0),
+    coin: 'blocx',
   };
 
   // Testnet Configuration
@@ -34,7 +34,7 @@ const Transactions = function(config, rpcData) {
     pubKeyHash: Buffer.from('8C', 'hex').readUInt8(0),
     scriptHash: Buffer.from('13', 'hex').readUInt8(0),
     wif: Buffer.from('EF', 'hex').readUInt8(0),
-    coin: 'dash',
+    coin: 'blocx',
   };
 
   // Calculate Generation Transaction

@@ -224,7 +224,8 @@ const Pool = function(config, configMain, callback) {
     _this.submitPrimary(shareData.hex, (error, response) => {
       if (error) _this.emitLog('error', false, response);
       else {
-        _this.emitLog('special', false, _this.text.stratumBlocksText4(_this.config.primary.coin.name, shareData.height));
+        const miner = shareData.addrPrimary.split('.')[0] || 'anonymous miner';
+        _this.emitLog('special', false, _this.text.stratumBlocksText4(_this.config.primary.coin.name, shareData.height, miner));
         _this.checkAccepted(_this.primary.daemon, shareData.hash, (accepted, transaction) => {
           shareData.transaction = transaction;
           callback(accepted, shareData);
@@ -429,9 +430,11 @@ const Pool = function(config, configMain, callback) {
 
     // Determine Block Handling Procedures
     const updates = {};
+    const rewards = {};
     blocks.forEach((block, idx) => {
       const current = workers[idx] || [];
       if (block.type !== 'primary') return;
+      rewards[block.round] = {};
 
       // Establish Separate Behavior
       let orphan, immature, generate;
@@ -441,10 +444,20 @@ const Pool = function(config, configMain, callback) {
       case 'orphan':
         orphan = _this.handleValidation(block, current, sending);
         Object.keys(orphan).forEach((address) => {
+
+          // Updates
           if (address in updates) updates[address][block.previous] += orphan[address];
           else {
             updates[address] = { immature: 0, generate: 0 };
             updates[address][block.previous] += orphan[address];
+          }
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address][block.previous] += orphan[address];
+          else {
+            rewards[block.round][address] = { immature: 0, generate: 0 };
+            rewards[block.round][address][block.previous] += orphan[address];
           }
         });
         break;
@@ -453,8 +466,15 @@ const Pool = function(config, configMain, callback) {
       case 'immature':
         immature = _this.handleValidation(block, current, sending);
         Object.keys(immature).forEach((address) => {
+
+          // Updates
           if (address in updates) updates[address].immature += immature[address];
           else updates[address] = { immature: immature[address], generate: 0 };
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address].immature += immature[address];
+          else rewards[block.round][address] = { immature: immature[address], generate: 0 };
         });
         break;
 
@@ -462,9 +482,18 @@ const Pool = function(config, configMain, callback) {
       case 'generate':
         generate = _this.handleValidation(block, current, sending);
         Object.keys(generate).forEach((address) => {
+
+           // Updates
           if (address in updates) updates[address].generate += generate[address];
           else updates[address] = { immature: 0, generate: generate[address] };
           if (block.previous === 'immature') updates[address].immature -= generate[address];
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address].generate += generate[address];
+          else rewards[block.round][address] = { immature: 0, generate: generate[address] };
+          if (block.previous === 'immature')
+            rewards[block.round][address].immature -= generate[address];
         });
         break;
 
@@ -475,7 +504,7 @@ const Pool = function(config, configMain, callback) {
     });
 
     // Return Updated Worker Data
-    callback(updates);
+    callback(updates, rewards);
   };
 
   // Validate Primary Balance and Checks
@@ -522,7 +551,7 @@ const Pool = function(config, configMain, callback) {
   };
 
   // Send Primary Payments to Miners
-  this.handlePrimaryPayments = function(payments, callback) {
+  this.handlePrimaryPayments = function(payments, users, callback) {
 
     // Calculate Total Payment to Each Miner
     const amounts = {};
@@ -530,12 +559,23 @@ const Pool = function(config, configMain, callback) {
       amounts[address] = utils.roundTo(payments[address], 8);
     });
 
-    // Validate Amounts >= Minimum
     const balances = {};
     Object.keys(amounts).forEach((address) => {
+
+      // Validate Amounts >= Minimum
       if (amounts[address] < _this.config.primary.payments.minPayment ||
         !_this.primary.payments.enabled) {
         balances[address] = amounts[address];
+        delete amounts[address];
+      }
+
+      // Validate Amounts >= Payout Limit
+      if (address in users && users[address] > amounts[address]) {
+        if (balances[address] > 0) {
+          balances[address] += amounts[address];
+        } else {
+          balances[address] = amounts[address];
+        }
         delete amounts[address];
       }
     });
@@ -805,9 +845,11 @@ const Pool = function(config, configMain, callback) {
 
     // Determine Block Handling Procedures
     const updates = {};
+    const rewards = {};
     blocks.forEach((block, idx) => {
       const current = workers[idx] || [];
       if (block.type !== 'auxiliary') return;
+      rewards[block.round] = {};
 
       // Establish Separate Behavior
       let orphan, immature, generate;
@@ -817,10 +859,20 @@ const Pool = function(config, configMain, callback) {
       case 'orphan':
         orphan = _this.handleValidation(block, current, sending);
         Object.keys(orphan).forEach((address) => {
+
+          // Updates
           if (address in updates) updates[address][block.previous] += orphan[address];
           else {
             updates[address] = { immature: 0, generate: 0 };
             updates[address][block.previous] += orphan[address];
+          }
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address][block.previous] += orphan[address];
+          else {
+            rewards[block.round][address] = { immature: 0, generate: 0 };
+            rewards[block.round][address][block.previous] += orphan[address];
           }
         });
         break;
@@ -829,8 +881,15 @@ const Pool = function(config, configMain, callback) {
       case 'immature':
         immature = _this.handleValidation(block, current, sending);
         Object.keys(immature).forEach((address) => {
+
+          // Updates
           if (address in updates) updates[address].immature += immature[address];
           else updates[address] = { immature: immature[address], generate: 0 };
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address].immature += immature[address];
+          else rewards[block.round][address] = { immature: immature[address], generate: 0 };
         });
         break;
 
@@ -838,9 +897,18 @@ const Pool = function(config, configMain, callback) {
       case 'generate':
         generate = _this.handleValidation(block, current, sending);
         Object.keys(generate).forEach((address) => {
+
+          // Updates
           if (address in updates) updates[address].generate += generate[address];
           else updates[address] = { immature: 0, generate: generate[address] };
           if (block.previous === 'immature') updates[address].immature -= generate[address];
+
+          // Rewards
+          if (address in rewards[block.round])
+            rewards[block.round][address].generate += generate[address];
+          else rewards[block.round][address] = { immature: 0, generate: generate[address] };
+          if (block.previous === 'immature')
+            rewards[block.round][address].immature -= generate[address];
         });
         break;
 
@@ -851,7 +919,7 @@ const Pool = function(config, configMain, callback) {
     });
 
     // Return Updated Worker Data
-    callback(updates);
+    callback(updates, rewards);
   };
 
   // Validate Auxiliary Balance and Checks
@@ -898,7 +966,7 @@ const Pool = function(config, configMain, callback) {
   };
 
   // Send Auxiliary Payments to Miners
-  this.handleAuxiliaryPayments = function(payments, callback) {
+  this.handleAuxiliaryPayments = function(payments, users, callback) {
 
     // Calculate Total Payment to Each Miner
     const amounts = {};
@@ -906,12 +974,23 @@ const Pool = function(config, configMain, callback) {
       amounts[address] = utils.roundTo(payments[address], 8);
     });
 
-    // Validate Amounts >= Minimum
     const balances = {};
     Object.keys(amounts).forEach((address) => {
+
+      // Validate Amounts >= Minimum
       if (amounts[address] < _this.config.auxiliary.payments.minPayment ||
         !_this.auxiliary.payments.enabled) {
         balances[address] = amounts[address];
+        delete amounts[address];
+      }
+
+      // Validate Amounts >= Payout Limit
+      if (address in users && users[address] > amounts[address]) {
+        if (balances[address] > 0) {
+          balances[address] += amounts[address];
+        } else {
+          balances[address] = amounts[address];
+        }
         delete amounts[address];
       }
     });
