@@ -1436,6 +1436,7 @@ const Pool = function(config, configMain, callback) {
 
     // Handle Client Subscription Events
     client.on('client.subscription', (params, callback) => {
+      
       const extraNonce = _this.manager.extraNonceCounter.next();
       callback(null, extraNonce, _this.manager.extraNonce2Size);
 
@@ -1443,7 +1444,9 @@ const Pool = function(config, configMain, callback) {
       const validPorts = _this.config.ports
         .filter((port) => port.port === client.socket.localPort)
         .filter((port) => typeof port.difficulty.initial !== 'undefined');
-      if (validPorts.length >= 1) client.broadcastDifficulty(validPorts[0].difficulty.initial);
+      const minerParams = params[0].split('/')[0] || '';
+      if (minerParams === 'NiceHash') client.broadcastDifficulty(validPorts[0].difficulty.niceHash);
+      else if (validPorts.length >= 1) client.broadcastDifficulty(validPorts[0].difficulty.initial);
       else client.broadcastDifficulty(8);
 
       // Send Mining Job Parameters to Miner

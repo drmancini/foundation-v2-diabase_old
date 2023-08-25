@@ -40,6 +40,7 @@ ports1.enabled = true;
 ports1.tls = false;
 ports1.difficulty = {};
 ports1.difficulty.initial = 32;
+ports1.difficulty.niceHash = 32;
 ports1.difficulty.minimum = 8;
 ports1.difficulty.maximum = 512;
 ports1.difficulty.targetTime = 15;
