@@ -30,10 +30,10 @@ const Transactions = function(config, rpcData) {
       public: Buffer.from('043587CF', 'hex').readUInt32LE(0),
       private: Buffer.from('04358394', 'hex').readUInt32LE(0),
     },
-    peerMagic: 'cee2caff',
-    pubKeyHash: Buffer.from('8C', 'hex').readUInt8(0),
-    scriptHash: Buffer.from('13', 'hex').readUInt8(0),
-    wif: Buffer.from('EF', 'hex').readUInt8(0),
+    peerMagic: '9955083E',
+    pubKeyHash: Buffer.from('4B', 'hex').readUInt8(0),
+    scriptHash: Buffer.from('4C', 'hex').readUInt8(0),
+    wif: Buffer.from('CB', 'hex').readUInt8(0),
     coin: 'blocx',
   };
 
