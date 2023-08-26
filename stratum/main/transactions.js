@@ -134,15 +134,15 @@ const Transactions = function(config, rpcData) {
     }
 
     // Handle Manual Founder Transactions
-    const founderReward = _this.rpcData.coinbasevalue * 0.03;
-    const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
-    const founderScript = utils.addressToScript(founderPayee, network);
-    reward -= founderReward;
-    txOutputBuffers.push(Buffer.concat([
-      utils.packUInt64LE(founderReward),
-      utils.varIntBuffer(founderScript.length),
-      founderScript,
-    ]));
+    // const founderReward = _this.rpcData.coinbasevalue * 0.03;
+    // const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
+    // const founderScript = utils.addressToScript(founderPayee, network);
+    // reward -= founderReward;
+    // txOutputBuffers.push(Buffer.concat([
+    //   utils.packUInt64LE(founderReward),
+    //   utils.varIntBuffer(founderScript.length),
+    //   founderScript,
+    // ]));
 
     // Handle Recipient Transactions
     let recipientTotal = 0;
