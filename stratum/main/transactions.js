@@ -146,7 +146,9 @@ const Transactions = function(config, rpcData) {
         founderScript,
       ]));
     } else {
-      const founderReward = _this.rpcData.coinbasevalue * 0.03;
+      let founderReward = _this.rpcData.coinbasevalue * 0.03;
+      if (_this.rpcData.height > 18000 && _this.rpcData.height < 24001)
+        founderReward = _this.rpcData.coinbasevalue * 0.18;
       const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
       const founderScript = utils.addressToScript(founderPayee, network);
       reward -= founderReward;
