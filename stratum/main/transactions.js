@@ -64,7 +64,7 @@ const Transactions = function(config, rpcData) {
     }
 
     // Calculate Coin Block Reward
-    let reward = rpcData.coinbasevalue;
+    let reward = _this.rpcData.coinbasevalue;
 
     // Handle Pool/Coinbase Addr/Flags
     const poolAddressScript = utils.addressToScript(_this.config.primary.address, network);
@@ -117,7 +117,7 @@ const Transactions = function(config, rpcData) {
       });
     }
 
-    // Handle Superblocks
+    // Handle Manual Superblocks
     if (_this.rpcData.superblock.length > 0) {
       _this.rpcData.superblock.forEach((payee) => {
         const payeeReward = payee.amount;
@@ -132,6 +132,17 @@ const Transactions = function(config, rpcData) {
         ]));
       });
     }
+
+    // Handle Manual Founder Transactions
+    const founderReward = _this.rpcData.coinbasevalue * 0.03;
+    const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
+    const founderScript = utils.addressToScript(founderPayee, network);
+    reward -= founderReward;
+    txOutputBuffers.push(Buffer.concat([
+      utils.packUInt64LE(founderReward),
+      utils.varIntBuffer(founderScript.length),
+      founderScript,
+    ]));
 
     // Handle Recipient Transactions
     let recipientTotal = 0;
