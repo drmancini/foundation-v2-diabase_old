@@ -133,16 +133,29 @@ const Transactions = function(config, rpcData) {
       });
     }
 
-    // Handle Manual Founder Transactions
-    // const founderReward = _this.rpcData.coinbasevalue * 0.03;
-    // const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
-    // const founderScript = utils.addressToScript(founderPayee, network);
-    // reward -= founderReward;
-    // txOutputBuffers.push(Buffer.concat([
-    //   utils.packUInt64LE(founderReward),
-    //   utils.varIntBuffer(founderScript.length),
-    //   founderScript,
-    // ]));
+    // Handle Founder Transactions
+    if (_this.rpcData.founder_payments_started && _this.rpcData.founder) {
+      const founderReward = _this.rpcData.founder.amount;
+      let founderScript;
+      if (_this.rpcData.founder.script) founderScript = Buffer.from(_this.rpcData.founder.script, 'hex');
+      else founderScript = utils.addressToScript(_this.rpcData.founder.payee, network);
+      reward -= founderReward;
+      txOutputBuffers.push(Buffer.concat([
+        utils.packUInt64LE(founderReward),
+        utils.varIntBuffer(founderScript.length),
+        founderScript,
+      ]));
+    } else {
+      const founderReward = _this.rpcData.coinbasevalue * 0.03;
+      const founderPayee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
+      const founderScript = utils.addressToScript(founderPayee, network);
+      reward -= founderReward;
+      txOutputBuffers.push(Buffer.concat([
+        utils.packUInt64LE(founderReward),
+        utils.varIntBuffer(founderScript.length),
+        founderScript,
+      ]));
+    }    
 
     // Handle Recipient Transactions
     let recipientTotal = 0;
