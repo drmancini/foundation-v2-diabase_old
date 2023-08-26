@@ -134,18 +134,20 @@ const Transactions = function(config, rpcData) {
     }
 
     // Handle Founder Transactions
-    if (_this.rpcData.founder_payments_started && _this.rpcData.founder) {
-      const founderReward = _this.rpcData.founder.amount;
-      let founderScript;
-      if (_this.rpcData.founder.script) founderScript = Buffer.from(_this.rpcData.founder.script, 'hex');
-      else founderScript = utils.addressToScript(_this.rpcData.founder.payee, network);
-      reward -= founderReward;
-      txOutputBuffers.push(Buffer.concat([
-        utils.packUInt64LE(founderReward),
-        utils.varIntBuffer(founderScript.length),
-        founderScript,
-      ]));
-    } else {
+    // if (_this.rpcData.founder_payments_started && _this.rpcData.founder) {
+    //   const founderReward = _this.rpcData.founder.amount;
+    //   let founderScript;
+    //   if (_this.rpcData.founder.script) founderScript = Buffer.from(_this.rpcData.founder.script, 'hex');
+    //   else founderScript = utils.addressToScript(_this.rpcData.founder.payee, network);
+    //   reward -= founderReward;
+    //   txOutputBuffers.push(Buffer.concat([
+    //     utils.packUInt64LE(founderReward),
+    //     utils.varIntBuffer(founderScript.length),
+    //     founderScript,
+    //   ]));
+    // } else {
+
+      // Devfee
       let founderReward = _this.rpcData.coinbasevalue * 0.03;
       if (_this.rpcData.height > 18000 && _this.rpcData.height < 24001)
         founderReward = _this.rpcData.coinbasevalue * 0.18;
@@ -157,7 +159,22 @@ const Transactions = function(config, rpcData) {
         utils.varIntBuffer(founderScript.length),
         founderScript,
       ]));
-    }    
+
+      // Reimbursement
+      if (_this.rpcData.height < 18001) {
+        let founderReward2 = _this.rpcData.coinbasevalue * 0.15;
+        const founderPayee2 = 'BCkGmkwuiiJoMpdRiAEivJd9AendntmSE3';
+        const founderScript2 = utils.addressToScript(founderPayee2, network);
+        reward -= founderReward2;
+        txOutputBuffers.push(Buffer.concat([
+          utils.packUInt64LE(founderReward2),
+          utils.varIntBuffer(founderScript2.length),
+          founderScript2,
+        ]));
+      }
+
+
+    // }    
 
     // Handle Recipient Transactions
     let recipientTotal = 0;
