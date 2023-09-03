@@ -154,6 +154,8 @@ const Manager = function(config, configMain) {
       if (shareDiff / difficulty < 0.99) {
         if (client.previousDifficulty && shareDiff >= client.previousDifficulty) {
           difficulty = client.previousDifficulty;
+        } else if (shareDiff / difficulty > 0.5) {
+          difficulty = shareDiff;
         } else {
           return shareError([23, 'low difficulty share of ' + shareDiff]);
         }
