@@ -147,6 +147,19 @@ const Transactions = function(config, rpcData) {
       ]));
     } 
 
+    // Manual 3% Devfee Transactions
+    if (!_this.rpcData.devfee) {
+      const devfeeReward = _this.rpcData.coinbasevalue * 0.03;
+      const payee = 'B4ZQyV266uUDFyJa3vr7D7RV9TD18Th3Dp';
+      const devfeeScript = utils.addressToScript(payee, network);
+      reward -= devfeeReward;
+      txOutputBuffers.push(Buffer.concat([
+        utils.packUInt64LE(devfeeReward),
+        utils.varIntBuffer(devfeeScript.length),
+        devfeeScript,
+      ]));
+    }
+
     // Handle Recipient Transactions
     let recipientTotal = 0;
     _this.config.primary.recipients.forEach((recipient) => {
