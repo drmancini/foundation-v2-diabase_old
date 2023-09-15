@@ -88,6 +88,9 @@ const Client = function(config, socket, id, authorizeFn) {
     case 'mining.configure':
       _this.handleConfigure(message);
       break;
+    case 'mining.suggest_difficulty':
+      _this.handleSuggestDifficulty(message);
+      break;
     case 'mining.multi_version':
       _this.handleMultiVersion(message);
       break;
@@ -294,6 +297,18 @@ const Client = function(config, socket, id, authorizeFn) {
     _this.asicboost = false;
     _this.versionMask = '00000000';
   };
+
+  // Manage Suggested Difficulty by the Miner
+  this.handleSuggestDifficulty = function(message) {
+    console.log(message)
+
+    // Broadcast Suggested Difficulty
+    _this.sendJson({
+      id: null,
+      method: 'mining.set_difficulty',
+      params: [difficulty],
+    });
+  }
 
   // Manage Stratum Multi-Versions
   this.handleMultiVersion = function() {
