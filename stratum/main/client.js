@@ -88,9 +88,10 @@ const Client = function(config, socket, id, authorizeFn) {
     case 'mining.configure':
       _this.handleConfigure(message);
       break;
-    // case 'mining.suggest_difficulty':
-    //   _this.handleSuggestDifficulty(message);
-    //   break;
+    case 'mining.suggest_difficulty':
+      _this.handleSuggestDifficulty(message);
+      _this.emit('client.mining.unknown', message);
+      break;
     case 'mining.multi_version':
       _this.handleMultiVersion(message);
       break;
