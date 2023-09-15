@@ -302,7 +302,10 @@ const Client = function(config, socket, id, authorizeFn) {
   // Manage Suggested Difficulty by the Miner
   this.handleSuggestDifficulty = function(message) {
     console.log('bzone')
-    console.log(message)
+    console.log(message.params[0])
+    console.log(_this.socket.localPort)
+    console.log(_this.config.ports)
+    { id: 445, method: 'mining.suggest_difficulty', params: [ 128 ] }
 
     // Broadcast Suggested Difficulty
     // _this.sendJson({
