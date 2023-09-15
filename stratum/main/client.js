@@ -88,10 +88,10 @@ const Client = function(config, socket, id, authorizeFn) {
     case 'mining.configure':
       _this.handleConfigure(message);
       break;
-    case 'mining.suggest_difficulty':
-      _this.handleSuggestDifficulty(message);
-      _this.emit('client.mining.unknown', message);
-      break;
+    // case 'mining.suggest_difficulty':
+      // _this.handleSuggestDifficulty(message);
+      // _this.emit('client.mining.unknown', message);
+      // break;
     case 'mining.multi_version':
       _this.handleMultiVersion(message);
       break;
@@ -300,20 +300,35 @@ const Client = function(config, socket, id, authorizeFn) {
   };
 
   // Manage Suggested Difficulty by the Miner
-  this.handleSuggestDifficulty = function(message) {
-    console.log('bzone')
-    console.log(message.params[0])
-    console.log(_this.socket.localPort)
-    console.log(_this.config.ports)
-    // { id: 445, method: 'mining.suggest_difficulty', params: [ 128 ] }
+  // this.handleSuggestDifficulty = function(message) {
+  //   const suggestedDiff = message.params[0] || null
+  //   console.log('bzone')
+  //   console.log(suggestedDiff)
+    
+  //   if (suggestedDiff) {
+  //     const diffSettings = _this.config.ports.filter((port) => port.port == _this.socket.localPort).difficulty || {};
+  //     const diff = diffSettings.minimum || null;
+  //     console.log(diff)
 
-    // Broadcast Suggested Difficulty
-    // _this.sendJson({
-    //   id: null,
-    //   method: 'mining.set_difficulty',
-    //   params: [difficulty],
-    // });
-  }
+  //     if (diff) {
+
+        // Broadcast Suggested Difficulty
+        // _this.sendJson({
+        //   id: null,
+        //   method: 'mining.set_difficulty',
+        //   params: [difficulty],
+        // });
+        // const mess = {
+          // id: null,
+          // method: 'mining.set_difficulty',
+          // params: [diff],
+        // }
+
+        // console.log(mess)
+      // }
+    // }
+    // { id: 445, method: 'mining.suggest_difficulty', params: [ 128 ] }
+  // }
 
   // Manage Stratum Multi-Versions
   this.handleMultiVersion = function() {
