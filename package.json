@@ -1,5 +1,5 @@
 {
-  "name": "foundation-v2-blocx",
+  "name": "foundation-v2-diabase",
   "version": "0.0.24",
   "description": "A high performance Stratum pool-server written in Node.js",
   "main": "./exports.js",
@@ -9,9 +9,9 @@
     "mining",
     "pool"
   ],
-  "homepage": "https://github.com/blinkhash/foundation-v2-dash",
+  "homepage": "https://github.com/drmancini/foundation-v2-diabase",
   "bugs": {
-    "url": "https://github.com/blinkhash/foundation-v2-dash/issues"
+    "url": "https://github.com/drmancini/foundation-v2-diabase/issues"
   },
   "license": "GPL-3.0",
   "author": {
@@ -39,7 +39,7 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/blinkhash/foundation-v2-dash.git"
+    "url": "https://github.com/drmancini/foundation-v2-diabase.git"
   },
   "dependencies": {
     "async": "^3.2.3",
