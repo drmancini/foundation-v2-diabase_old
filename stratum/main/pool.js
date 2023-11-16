@@ -92,9 +92,7 @@ const Pool = function(config, configMain, callback) {
 
   // Check if Submitted Block was Accepted
   this.checkAccepted = function(daemon, hash, callback) {
-    console.log(hash)
     daemon.sendCommands([['getblock', [hash]]], false, (results) => {
-      console.log(results)
       const blocks = results.filter((result) => {
         return result.response && result.response.hash === hash && result.response.confirmations >= 0;
       });
