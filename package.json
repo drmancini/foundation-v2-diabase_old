@@ -1,5 +1,5 @@
 {
-  "name": "foundation-v2-dash",
+  "name": "foundation-v2-blocx",
   "version": "0.0.24",
   "description": "A high performance Stratum pool-server written in Node.js",
   "main": "./exports.js",
