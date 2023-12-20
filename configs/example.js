@@ -1,6 +1,6 @@
 /*
  *
- * Example (Dash)
+ * Example (Diabase)
  *
  */
 
