@@ -568,7 +568,7 @@ describe('Test pool functionality', () => {
         response.push([type, text]);
         if (response.length === 2) {
           expect(response[0][0]).toBe('special');
-          expect(response[0][1]).toBe('Submitted a primary block (Dash:1) successfully to Dash\'s daemon instance(s)');
+          expect(response[0][1]).toBe('Submitted a primary block (Diabase:1) successfully to Diabase\'s daemon instance(s)');
           expect(response[1][0]).toBe('error');
           expect(response[1][1]).toBe('The block was rejected by the network');
           done();
@@ -650,7 +650,7 @@ describe('Test pool functionality', () => {
     pool.on('pool.log', (type, text) => {
       if (type !== 'debug') {
         expect(type).toBe('special');
-        expect(text).toBe('Submitted a primary block (Dash:1) successfully to Dash\'s daemon instance(s)');
+        expect(text).toBe('Submitted a primary block (Diabase:1) successfully to Diabase\'s daemon instance(s)');
         done();
       }
     });
@@ -981,7 +981,7 @@ describe('Test pool functionality', () => {
           expect(response[0][0]).toBe('warning');
           expect(response[0][1]).toBe('Network difficulty (0) is lower than the difficulty on port 3002 (32)');
           expect(response[1][0]).toBe('log');
-          expect(response[1][1]).toBe('Requested template from primary chain (Dash:742781) via RPC polling');
+          expect(response[1][1]).toBe('Requested template from primary chain (Diabase:742781) via RPC polling');
           done();
         }
       }
@@ -1032,7 +1032,7 @@ describe('Test pool functionality', () => {
           expect(response[1][0]).toBe('log');
           expect(response[1][1]).toBe('Requested template from auxiliary chain (Namecoin:2) via RPC polling');
           expect(response[2][0]).toBe('log');
-          expect(response[2][1]).toBe('Requested template from primary chain (Dash:742780) via RPC polling');
+          expect(response[2][1]).toBe('Requested template from primary chain (Diabase:742780) via RPC polling');
           done();
         }
       }
@@ -1166,7 +1166,7 @@ describe('Test pool functionality', () => {
           expect(response[1][0]).toBe('log');
           expect(response[1][1]).toBe('Requested template from auxiliary chain (Namecoin:2) via RPC polling');
           expect(response[2][0]).toBe('log');
-          expect(response[2][1]).toBe('Requested template from primary chain (Dash:742780) via RPC polling');
+          expect(response[2][1]).toBe('Requested template from primary chain (Diabase:742780) via RPC polling');
           done();
         }
       }
