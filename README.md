@@ -1,4 +1,4 @@
-# Foundation Stratum (Dash, v2)
+# Foundation Stratum (Diabase, v2)
 
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/blinkhash/foundation-v2-dash.svg?style=flat-square)](https://codecov.io/gh/blinkhash/foundation-v2-dash/)
 [![Foundation CI](https://github.com/blinkhash/foundation-v2-dash/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/blinkhash/foundation-v2-dash/actions/workflows/build.yml)
