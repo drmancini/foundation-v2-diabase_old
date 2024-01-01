@@ -43,8 +43,9 @@ ports1.difficulty.initial = 32;
 ports1.difficulty.niceHash = 32;
 ports1.difficulty.minimum = 8;
 ports1.difficulty.maximum = 512;
-ports1.difficulty.targetTime = 15;
-ports1.difficulty.retargetTime = 90;
+ports1.difficulty.cacheTime = 15; // min
+ports1.difficulty.targetTime = 15; // sec
+ports1.difficulty.retargetTime = 90; // sec
 ports1.difficulty.variance = 0.3;
 config.ports.push(ports1);
 

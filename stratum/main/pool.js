@@ -186,7 +186,7 @@ const Pool = function(config, configMain, callback) {
         // Validate Shares for Workers w/ 51% Time
         let shares = worker.work;
         const timePeriod = utils.roundTo(worker.times / maxTime, 2);
-        if (timePeriod < 0.51) {
+        if (_this.config.primary.payments.enablePPLNT && timePeriod < 0.51) {
           const lost = shares * (1 - timePeriod);
           shares = utils.roundTo(Math.max(shares - lost, 0), 2);
         }
@@ -1397,7 +1397,6 @@ const Pool = function(config, configMain, callback) {
       _this.emitLog('log', false, _this.text.stratumClientText1(client.addrPrimary, diff));
     });
     client.on('client.difficulty.updated', (diff) => {
-      _this.difficulty[client.socket.localPort].clients[client.id] = [];
       _this.emitLog('log', false, _this.text.stratumClientText2(client.addrPrimary, diff));
     });
 
